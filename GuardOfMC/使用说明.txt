@@ -1,0 +1,37 @@
+GuardOfMC 使用说明
+==================
+
+【各文件/文件夹用途】
+mc_guard.py        守护主程序(监控死亡+自动快照+自动复活+自动回滚)
+nbt_tool.py        存档解析工具(level.dat 与玩家数据的读写)
+parse_log.py       LevelDB 日志解析(含 CRC 校验)
+append_batch.py    玩家数据写回工具(日志追加, 块对齐+CRC)
+analyze2.py        数据库分析(定位当前日志/序列号/最新玩家记录)
+sst_scan.py        数据库表扫描(深度查找玩家数据)
+python\             便携版 Python 3.12(无需安装, 别删)
+mc-guard-hidden.vbs 隐藏窗口启动器(计划任务调用它)
+world-path.txt      【必填】世界存档路径, 一行一个
+查看快照.bat        双击: 列出最近快照
+恢复最新快照.bat    双击: 一键回滚到最新快照(先关游戏)
+守护状态.bat        双击: 查看守护进程与日志
+启动守护.bat        双击: 手动启动守护
+安装守护.bat        双击: 注册计划任务并启动(每10分钟保活)
+snapshots\          【自动生成】每5分钟滚动快照(留12份)
+death-snapshots\   【自动生成】死亡现场快照(留5份)
+quarantine\        【自动生成】回滚时被替换的旧世界
+guard-log.txt      【自动生成】运行日志
+guard.lock         【自动生成】防双开锁
+
+【新电脑使用步骤】
+1. 把整个 GuardOfMC 文件夹复制到新电脑 D 盘;
+2. 启动一次 Minecraft 进入要保护的世界后退出;
+3. 打开存档目录(Xbox版: %APPDATA%\Minecraft Bedrock\Users\<XUID>\games\com.mojang\minecraftWorlds\;
+   商店版: %LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftWorlds\),
+   用 levelname.txt 确认世界名, 复制该文件夹完整路径;
+4. 用记事本把路径写入 world-path.txt(一行) 保存;
+5. 双击 安装守护.bat;
+6. 完成! 死亡自动复活+每5分钟快照全自动。
+
+【注意】
+- 若放到别的盘/文件夹, 需同步修改 vbs 和 bat 里的路径;
+- 想保成就别切创造模式; 复活模式修改 mc_guard.py 顶部 REVIVE_MODE(0=生存 1=创造)。
